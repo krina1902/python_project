@@ -7,6 +7,10 @@ import random
 def index(request):
 	return render(request,'index.html')
 
+def seller_index(request):
+	return render(request,'seller-index.html')
+
+
 def checkout(request):
 	return render(request,'checkout.html')
 
@@ -25,7 +29,8 @@ def signup(request):
 					mobile=request.POST['mobile'],
 					address=request.POST['address'],
 					password=request.POST['password'],
-					profile_pic=request.FILES['profile_pic']
+					profile_pic=request.FILES['profile_pic'],
+					usertype=request.POST['usertype']
 					)
 				msg='SignUp Suceesfully'
 				return render(request,'signup.html',{'msg':msg})
@@ -40,10 +45,16 @@ def login(request):
 		try:
 			user=User.objects.get(email=request.POST['email'])
 			if user.password==request.POST['password']:
-				request.session['email']=user.email
-				request.session['fname']=user.fname
-				request.session['profile_pic']=user.profile_pic.url
-				return render(request,'index.html')
+				if user.usertype=="buyer":
+					request.session['email']=user.email
+					request.session['fname']=user.fname
+					request.session['profile_pic']=user.profile_pic.url
+					return render(request,'index.html')
+				else:
+					request.session['email']=user.email
+					request.session['fname']=user.fname
+					request.session['profile_pic']=user.profile_pic.url
+					return render(request,'seller-index.html')
 			else:
 				msg='Your Password is Incorrect'
 				return render(request,'login.html',{'msg':msg})
@@ -63,8 +74,8 @@ def logout(request):
 
 
 def change_password(request):
+	user=User.objects.get(email=request.session['email'])
 	if request.method=='POST':
-		user=User.objects.get(email=request.session['email'])
 		if user.password==request.POST['oldpassword']:
 			if request.POST['npassword']==request.POST['cnpassword']:
 				user.password=request.POST['npassword']
@@ -72,12 +83,21 @@ def change_password(request):
 				return redirect('logout')
 			else:
 				msg='New password and Confirm New password does not match'
-				return render(request,'change-password.html',{'msg':msg})
+				if user.usertype=='buyer':
+					return render(request,'change-password.html',{'msg':msg})
+				else:
+					return render(request,'seller-change-password.html',{'msg':msg})
 		else:
 				msg='Old password does not match'
-				return render(request,'change-password.html',{'msg':msg})
+				if user.usertype=='buyer':
+					return render(request,'change-password.html',{'msg':msg})
+				else:
+					return render(request,'seller-change-password.html',{'msg':msg})
 	else:
-		return render(request,'change-password.html')
+		if user.usertype=='buyer':
+			return render(request,'change-password.html')
+		else:
+			return render(request,'seller-change-password.html')
 
 def profile(request):
 	user=User.objects.get(email=request.session['email'])
@@ -94,9 +114,15 @@ def profile(request):
 		user.save()
 		request.session['profile_pic']=user.profile_pic.url
 		msg='Profile Update Successfully'
-		return render(request,'profile.html',{'user':user,'msg':msg})
+		if user.usertype=='buyer':
+			return render(request,'profile.html',{'user':user,'msg':msg})
+		else:
+			return render(request,'seller-profile.html',{'user':user,'msg':msg})
 	else:
-		return render(request,'profile.html',{'user':user})
+		if user.usertype=='buyer':
+			return render(request,'profile.html',{'user':user})
+		else:
+			return render(request,'seller-profile.html',{'user':user})
 
 def forgot_password (request):
 	if request.method=="POST":
