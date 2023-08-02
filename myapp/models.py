@@ -14,3 +14,19 @@ class User(models.Model):
 
 	def __str__(self):
 		return self.fname
+
+class Product(models.Model):
+	seller=models.ForeignKey(User,on_delete=models.CASCADE)
+	choice1=(
+		("Laptop","Laptop"),
+		("Accessories","Accessories"),
+		("Camera","Camera"),
+		)
+	product_category=models.CharField(max_length=100,choices=choice1)
+	product_name=models.CharField(max_length=100)
+	product_price=models.PositiveSmallIntegerField()
+	product_desc=models.TextField()
+	product_image=models.ImageField(upload_to="product_image/",default="")
+
+	def __str__ (self):
+		return self.seller.fname + "-" + self.product_name

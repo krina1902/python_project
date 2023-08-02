@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User
+from .models import User,Product
 import requests
 import random
 
@@ -165,3 +165,28 @@ def new_password(request):
 	else:
 		msg='New password and Confirm new password does not match'
 		return render(request,'new-password.html',{'mobile':mobile,'msg':msg})
+
+def seller_add_product(request):
+	seller=User.objects.get(email=request.session['email'])
+	if request.method=='POST':
+		Product.objects.create(
+			seller=seller,
+			product_category=request.POST['product_category'],
+			product_name=request.POST['product_name'],
+			product_price=request.POST['product_price'],
+			product_desc=request.POST['product_desc'],
+			product_image=request.FILES['product_image']
+			)
+		msg='Product Added Successfully'
+		return render(request,'seller-add-product.html',{'msg':msg})
+	else:
+		return render(request,'seller-add-product.html')
+
+def seller_view_product(request):
+	seller=User.objects.get(email=request.session['email'])
+	products=Product.objects.filter(seller=seller)
+	return render(request,'seller-view-product.html',{'products':products})
+
+def seller_product_details(request,pk):
+	product=Product.objects.get(pk=pk)
+	return render(request,'seller-product-details.html',{'product':product})

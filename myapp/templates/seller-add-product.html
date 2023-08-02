@@ -1,0 +1,60 @@
+{% extends 'seller-header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		
+    </head>
+	<body>
+		
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						{% if msg%}
+							<b style="color:red">{{msg}}</b>
+						{% endif %}
+						<form name="form" method="post" action="{% url 'seller-add-product'%}" enctype="multipart/form-data">
+								{% csrf_token %}
+							<div class="form-group">
+								<select class="input" name="product_category">
+									<option>------Select Option------</option>
+									<option value="Laptop" >Laptop</option>
+									<option value="Accessories">Accessories</option>
+									<option value="Camera">Camera</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="product_name" placeholder="Product Name">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="product_price" placeholder="Product Price">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="product_desc" placeholder="Product Description">
+							</div>
+							<div class="form-group">
+								<input class="input" type="file" name="product_image">
+							</div>
+							<div class="form-group">
+								<input class="btn btn-danger" type="submit" name="action" value="Add Product">
+							</div>
+						</form>	
+					</div>
+				</div>
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		
+	</body>
+</html>
+{% endblock %}
