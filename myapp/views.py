@@ -15,6 +15,7 @@ def checkout(request):
 	return render(request,'checkout.html')
 
 def signup(request):
+	
 	if request.method=='POST':
 		try:
 			User.objects.get(email=request.POST['email'])
@@ -30,7 +31,8 @@ def signup(request):
 					address=request.POST['address'],
 					password=request.POST['password'],
 					profile_pic=request.FILES['profile_pic'],
-					usertype=request.POST['usertype']
+					usertype=request.POST['usertype'],
+					admin_access=admin_access,
 					)
 				msg='SignUp Suceesfully'
 				return render(request,'signup.html',{'msg':msg})
@@ -51,10 +53,14 @@ def login(request):
 					request.session['profile_pic']=user.profile_pic.url
 					return render(request,'index.html')
 				else:
-					request.session['email']=user.email
-					request.session['fname']=user.fname
-					request.session['profile_pic']=user.profile_pic.url
-					return render(request,'seller-index.html')
+					if user.admin_access==True:
+						request.session['email']=user.email
+						request.session['fname']=user.fname
+						request.session['profile_pic']=user.profile_pic.url
+						return render(request,'seller-index.html')
+					else:
+						msg='Admin not accept your request'
+						return render(request,'login.html',{'msg':msg})
 			else:
 				msg='Your Password is Incorrect'
 				return render(request,'login.html',{'msg':msg})
