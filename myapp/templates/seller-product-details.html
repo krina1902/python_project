@@ -100,8 +100,8 @@
 
 						</div>
 						<div>
-							<button class="btn btn-primary">Edit</button>
-							<button class="btn btn-danger">Delete</button>
+							<a href="{% url 'seller-edit-product' pk=product.pk%}"><button class="btn btn-primary">Edit</button></a>
+							<a href="{% url 'seller-delete-product' pk=product.pk%}"><button class="btn btn-danger">Delete</button></a>
 						</div>
 					</div>
 					<!-- /Product details -->

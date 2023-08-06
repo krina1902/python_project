@@ -196,3 +196,43 @@ def seller_view_product(request):
 def seller_product_details(request,pk):
 	product=Product.objects.get(pk=pk)
 	return render(request,'seller-product-details.html',{'product':product})
+
+def seller_edit_product (request,pk):
+	product=Product.objects.get(pk=pk)
+	if request.method=="POST":
+		product.product_category=request.POST['product_category']
+		product.product_name=request.POST['product_name']
+		product.product_price=request.POST['product_price']
+		product.product_desc=request.POST['product_desc']
+		try:
+			product_image=request.FILES['product_image']
+		except:
+			pass
+		product.save()
+		msg='Product Update Successfully'
+		return render(request,'seller-edit-product.html',{'product':product,'msg':msg})
+	else:
+		return render(request,'seller-edit-product.html',{'product':product})
+
+def seller_delete_product(request,pk):
+	product=Product.objects.get(pk=pk)
+	product.delete()
+	return redirect('seller-view-product')
+
+def seller_view_laptops(request):
+	seller=User.objects.get(email=request.session['email'])
+	products=Product.objects.filter(seller=seller,product_category="Laptop")
+	return render(request,'seller-view-product.html',{'products':products})
+	return render(request,'seller-view-product.html')
+
+def seller_view_cameras(request):
+	seller=User.objects.get(email=request.session['email'])
+	products=Product.objects.filter(seller=seller,product_category="Camera")
+	return render(request,'seller-view-product.html',{'products':products})
+	return render(request,'seller-view-product.html')
+
+def seller_view_accessories(request):
+	seller=User.objects.get(email=request.session['email'])
+	products=Product.objects.filter(seller=seller,product_category="Acessories")
+	return render(request,'seller-view-product.html',{'products':products})
+	return render(request,'seller-view-product.html')
