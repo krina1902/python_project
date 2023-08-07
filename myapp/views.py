@@ -5,7 +5,8 @@ import random
 
 # Create your views here.
 def index(request):
-	return render(request,'index.html')
+	products=Product.objects.all()
+	return render(request,'index.html',{'products':products})
 
 def seller_index(request):
 	return render(request,'seller-index.html')
@@ -223,16 +224,23 @@ def seller_view_laptops(request):
 	seller=User.objects.get(email=request.session['email'])
 	products=Product.objects.filter(seller=seller,product_category="Laptop")
 	return render(request,'seller-view-product.html',{'products':products})
-	return render(request,'seller-view-product.html')
+	
 
 def seller_view_cameras(request):
 	seller=User.objects.get(email=request.session['email'])
 	products=Product.objects.filter(seller=seller,product_category="Camera")
 	return render(request,'seller-view-product.html',{'products':products})
-	return render(request,'seller-view-product.html')
+	
 
 def seller_view_accessories(request):
 	seller=User.objects.get(email=request.session['email'])
-	products=Product.objects.filter(seller=seller,product_category="Acessories")
+	products=Product.objects.filter(seller=seller,product_category="Accessories")
 	return render(request,'seller-view-product.html',{'products':products})
-	return render(request,'seller-view-product.html')
+
+def product_details(request,pk):
+	product=Product.objects.get(pk=pk)
+	return render(request,'product-details.html',{'product':product})
+
+def add_to_wishlist (request,pk):
+	return render(request,'add-to-wishlist.html')
+

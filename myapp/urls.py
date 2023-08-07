@@ -21,5 +21,7 @@ urlpatterns = [
     path('seller-view-laptops/',views.seller_view_laptops,name='seller-view-laptops'),
     path('seller-view-cameras/',views.seller_view_cameras,name='seller-view-cameras'),
     path('seller-view-accessories/',views.seller_view_accessories,name='seller-view-accessories'),
+    path('product-details/<int:pk>/',views.product_details,name='product-details'),
+    path('add-to-wishlist/<int:pk>/',views.add_to_wishlist,name='add-to-wishlist'),
 
 ]
