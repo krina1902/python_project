@@ -1,0 +1,103 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		
+
+    </head>
+	<body>
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				
+				<div class="col-md-12">
+						<div class="section-title">
+							{% if carts %}
+								<h3 class="breadcrumb-header">Cart</h3>
+							{% else %}
+								<h3 class="breadcrumb-header">No Product In Cart</h3>
+							{% endif %}
+
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a  href="{% url 'seller-view-product' %}">All</a></li>
+									<li><a  href="{% url 'seller-view-laptops'%}">Laptops</a></li>
+									<li><a  href="{% url 'seller-view-cameras'%}">Cameras</a></li>
+									<li><a  href="{% url 'seller-view-accessories'%}">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container" style="padding-bottom: 100px;">
+				<!-- row -->
+				<div class="row">
+
+
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
+						<div class="row">
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab1" class="tab-pane active">
+									<div class="products-slick" data-nav="#slick-nav-1">
+										{% for i in carts %}
+										<!-- product -->
+										<div class="product">
+											<div class="product-img">
+												<img src="{{i.product.product_image.url}}" alt="" width="250px" height="250px">
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{i.product.product_category}}</p>
+												<h3 class="product-name"><a href="#">{{i.product.product_name}}</a></h3>
+												<h4 class="product-price">Product Price:Rs.{{i.product_price}}</h4>
+												<form method="post" action="{% url 'change-qty' %}">
+													    {% csrf_token %}
+													<input type="hidden" name="pk" value="{{i.pk}}">
+													
+												    <h4 class="product-price">Product QTY:
+													<input class="product-name" name="product_qty" type="number" value="{{i.product_qty}}" min="1" style="width: 50px;" onchange="this.form.submit()"></h4>
+											    </form>
+												<h4 class="product-price">Total Price: Rs.{{i.total_price}}</h4>
+												
+											</div>
+											<div class="add-to-cart">
+												<a href="{% url 'product-details' pk=i.product.pk %}"><button class="add-to-cart-btn">Product Details</button></a>
+											</div>
+										</div>
+										<!-- /product -->
+										{% endfor %}
+									</div>
+									<div id="slick-nav-1" class="products-slick-nav"></div>
+								</div>
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+					<!-- Products tab & slick -->
+				</div>
+				<!-- /row -->
+				<br>
+				<hr>
+				<h1 class="product-body"> Net Price : {{net_price}}</h1>
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		
+
+	</body>
+</html>
+{% endblock %}

@@ -100,8 +100,19 @@
 
 						</div>
 						<div>
-							<a href="#"><button class="btn btn-primary">Add To Cart</button></a>
-							<a href="{% url 'add-to-wishlist' pk=product.pk%}"><button class="btn btn-danger">Add To Wishlist</button></a>
+							{% if cart_flag == True %}
+								<a href="{% url 'remove-from-cart' pk=product.pk %}"><input type="button" class="btn btn-primary" value="Remove From Cart"></a>
+							{% else %}
+								<a href="{% url 'add-to-cart' pk=product.pk %}"><input type="button" class="btn btn-primary" value="Add To Cart"></a>
+							{% endif %}
+							
+
+							{% if wishlist_flag == True %}
+								<a href="{% url 'remove-from-wishlist' pk=product.pk %}"><input type="button" class="btn btn-danger" value="Remove From Wishlist"></a>
+							{% else %}
+								<a href="{% url 'add-to-wishlist' pk=product.pk %}"><input type="button" class="btn btn-danger" value="Add To Wishlist"></a>
+							{% endif %}
+							
 						</div>
 					</div>
 					<!-- /Product details -->
