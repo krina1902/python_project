@@ -4,8 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		
-
+		<script src="https://js.stripe.com/v3/"></script>
     </head>
 	<body>
 
@@ -91,11 +90,45 @@
 				<br>
 				<hr>
 				<h1 class="product-body"> Net Price : {{net_price}}</h1>
+				<form method="post">
+					<input type="hidden" name="amount" id="net_price" value="{{net_price}}">
+					<button type="button" id="checkout-button" class="btn btn-primary">Checkout</button>
+					
+				</form>
 			</div>
+
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+		<script type="text/javascript">
+		var stripe = Stripe('pk_test_51NdXgqSIMJhQiLikDGu8FAgYe1skZCHD1e7I84EKd10fUYxQF8FjigQdbCqeXPgxGe04dDoOl0vBZtBSbbd5VGbu00bsYm4UI1');
+		var checkoutButton = document.getElementById('checkout-button');
 
+			checkoutButton.addEventListener('click',function() {
+				fetch('/create-checkout-session/',{
+					method:'POST',
+					headers:{
+						'Accept':'application/json',
+						'X-Requested-With' : 'XMLHttpRequest',
+					},
+					body:JSON.stringify({'post-data':'{{net_price}}'})
+				})
+			.then(function(response){
+			return response.json();
+			})
+			.then (function(session){
+			return stripe.redirectToCheckout({sessionId : session.id});
+			})
+			.then(function(result){
+				if(result.error){
+					alert(result.error.message)
+				}
+			})
+			.catch(function(error){
+				console.error('Error':error);
+			});
+			});
+		</script>
 		
 
 	</body>
