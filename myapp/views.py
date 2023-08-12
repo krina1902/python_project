@@ -4,43 +4,43 @@ import requests
 import random
 import stripe
 from django.conf import settings
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+	
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
 YOUR_DOMAIN = 'http://localhost:8000'
 
+
 @csrf_exempt
 def create_checkout_session(request):
-	amount=int(json.load(request)['post-data'])
-	final_amount=100*amount
-
-	session=stripe.checkout.Session.create(
-		payment_method_status=['card'],
+	amount = int(json.load(request)['post_data'])
+	final_amount=amount*100
+	
+	session = stripe.checkout.Session.create(
+		payment_method_types=['card'],
 		line_items=[{
-			'price_data':{
-				'currency':'inr',
-				'product_data':{
-					'name':'Checkout Session Data',
-					 },
-				'unit_amount':final_amount,
+			'price_data': {
+				'currency': 'inr',
+				'product_data': {
+					'name': 'Checkout Session Data',
+					},
+				'unit_amount': final_amount,
 				},
 			'quantity': 1,
-
 			}],
-			mode='payment',
-			success_url=YOUR_DOMAIN + '/success.html',
-			cancel_url=YOUR_DOMAIN + '/cancel.html',
-		)
+		mode='payment',
+		success_url=YOUR_DOMAIN + '/success.html',
+		cancel_url=YOUR_DOMAIN + '/cancel.html',)
 	return JsonResponse({'id': session.id})
 
-def success (request):
+def success(request):
 	user=User.objects.get(email=request.session['email'])
 	carts=Cart.objects.filter(user=user,payment_status=False)
 	for i in carts:
 		i.payment_status=True
 		i.save()
+		
 	carts=Cart.objects.filter(user=user,payment_status=False)
 	request.session['cart_count']=len(carts)
 	return render(request,'success.html')

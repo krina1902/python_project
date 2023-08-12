@@ -89,48 +89,52 @@
 				<!-- /row -->
 				<br>
 				<hr>
-				<h1 class="product-body"> Net Price : {{net_price}}</h1>
-				<form method="post">
-					<input type="hidden" name="amount" id="net_price" value="{{net_price}}">
-					<button type="button" id="checkout-button" class="btn btn-primary">Checkout</button>
-					
-				</form>
+				
+				<form method="POST">
+							<h3>Net Price : {{net_price}}</h3>
+							<input type="hidden" name="amount" id="net_price" value="{{net_price}}">
+							<button type="button" class="btn btn-lg btn-primary" id="checkout-button">Checkout</button>
+						</form>
+					</div>
+					<!-- Products tab & slick -->
+				</div>
+				<!-- /row -->
 			</div>
-
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-		<script type="text/javascript">
-		var stripe = Stripe('pk_test_51NdXgqSIMJhQiLikDGu8FAgYe1skZCHD1e7I84EKd10fUYxQF8FjigQdbCqeXPgxGe04dDoOl0vBZtBSbbd5VGbu00bsYm4UI1');
-		var checkoutButton = document.getElementById('checkout-button');
+	<script type="text/javascript">
+    var stripe = Stripe('pk_test_51NdXgqSIMJhQiLikDGu8FAgYe1skZCHD1e7I84EKd10fUYxQF8FjigQdbCqeXPgxGe04dDoOl0vBZtBSbbd5VGbu00bsYm4UI1');
+    var checkoutButton = document.getElementById('checkout-button');
 
-			checkoutButton.addEventListener('click',function() {
-				fetch('/create-checkout-session/',{
-					method:'POST',
-					headers:{
-						'Accept':'application/json',
-						'X-Requested-With' : 'XMLHttpRequest',
-					},
-					body:JSON.stringify({'post-data':'{{net_price}}'})
-				})
-			.then(function(response){
-			return response.json();
-			})
-			.then (function(session){
-			return stripe.redirectToCheckout({sessionId : session.id});
-			})
-			.then(function(result){
-				if(result.error){
-					alert(result.error.message)
-				}
-			})
-			.catch(function(error){
-				console.error('Error':error);
-			});
-			});
-		</script>
-		
-
+    checkoutButton.addEventListener('click', function() { 
+        fetch('/create-checkout-session/', {
+        method: 'POST',
+        headers:{
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({'post_data':'{{net_price}}'})
+    })
+ .then(function(response) {
+ return response.json();
+ })
+ .then(function(session) {
+ return stripe.redirectToCheckout({ sessionId: session.id });
+ })
+ .then(function(result) {
+ // If `redirectToCheckout` fails due to a browser or network
+ // error, you should display the localized error message to your
+ // customer using `error.message`.
+ if (result.error) {
+ alert(result.error.message);
+ }
+ })
+ .catch(function(error) {
+ console.error('Error:', error);
+ });
+ });
+ </script>
 	</body>
 </html>
 {% endblock %}
