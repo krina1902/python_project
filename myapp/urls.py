@@ -32,6 +32,6 @@ urlpatterns = [
     path('create-checkout-session/',views.create_checkout_session,name='payment'),
     path('success.html/', views.success,name='success'),
     path('cancel.html/', views.cancel,name='cancel'),
-
-
+    path('myorder.html/', views.myorder,name='myorder'),
+    path('seller-view-order/',views.seller_view_order,name='seller-view-order')
 ]
