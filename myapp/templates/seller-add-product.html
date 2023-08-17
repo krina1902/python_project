@@ -32,7 +32,8 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="product_name" placeholder="Product Name">
+								<input class="input" type="text" name="product_name" placeholder="Product Name" id="product_name">
+								<span id="product_error"></span>
 							</div>
 							<div class="form-group">
 								<input class="input" type="text" name="product_price" placeholder="Product Price">
@@ -53,7 +54,27 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+		<script>
+			$("#product_name").change(function(){
+				var product_name=$(this).val();
 
+				$.ajax({
+					url: '/ajax/validate_product_name/',
+					data: {
+						'product_name':product_name
+					},
+					datatype: 'json',
+					success: function(data){
+						if(data.is_taken) {
+							document.getElementById('product_error').innerHTML='This Product Is Alerady Added'
+						}
+						else{
+							document.getElementById('product_error').innerHTML="";
+						}
+					}
+				});
+			});
+		</script>
 		
 	</body>
 </html>

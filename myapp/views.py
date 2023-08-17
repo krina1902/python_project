@@ -371,3 +371,26 @@ def seller_view_order(request):
 			myorder.append(i)
 	return render(request,'seller-view-order.html',{'myorder':myorder})
 
+def validate_signup(request):
+	email=request.GET.get('email')
+	data={
+		'is_taken' : User.objects.filter(email__iexact=email).exists()
+	}
+	return JsonResponse(data)
+
+def validate_oldpassword(request):
+	user=User.objects.get(email=request.session['email'])
+	oldpassword=request.GET.get('oldpassword')
+	password=request.GET.get('password')
+	data={
+		'is_taken' : User.objects.filter(password__iexact=oldpassword).exists()
+	}
+	return JsonResponse(data)
+
+def validate_product_name(request):
+	product_name=request.GET.get('product_name')
+	data={
+		'is_taken' : Product.objects.filter(product_name__iexact=product_name).exists()
+	}
+	return JsonResponse(data)
+

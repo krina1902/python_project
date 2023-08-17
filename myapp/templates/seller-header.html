@@ -28,6 +28,7 @@
 
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -150,8 +151,8 @@
 				<!-- responsive-nav -->
 				<div id="responsive-nav">
 					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="{% url 'seller-index' %}">Home</a></li>
+					<ul class="main-nav nav navbar-nav active">
+						<li ><a href="{% url 'seller-index' %}">Home</a></li>
 						<li><a href="{%url 'seller-add-product'%}">Add Product</a></li>
 						<li><a href="{%url 'seller-view-product'%}">View Product</a></li>
 						<li><a href="{% url 'seller-view-order'%}">View Orders</a></li>

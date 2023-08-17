@@ -33,5 +33,9 @@ urlpatterns = [
     path('success.html/', views.success,name='success'),
     path('cancel.html/', views.cancel,name='cancel'),
     path('myorder.html/', views.myorder,name='myorder'),
-    path('seller-view-order/',views.seller_view_order,name='seller-view-order')
+    path('seller-view-order/',views.seller_view_order,name='seller-view-order'),
+    path('ajax/validate_email/',views.validate_signup,name='validate_email'),
+    path('ajax/validate_oldpassword/',views.validate_oldpassword,name='validate_oldpassword'),
+    path('ajax/validate_product_name/',views.validate_product_name,name='validate_product_name'),
+    
 ]
