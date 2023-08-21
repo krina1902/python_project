@@ -77,7 +77,7 @@ def signup(request):
 					password=request.POST['password'],
 					profile_pic=request.FILES['profile_pic'],
 					usertype=request.POST['usertype'],
-					admin_access=admin_access,
+		
 					)
 				msg='SignUp Suceesfully'
 				return render(request,'signup.html',{'msg':msg})
